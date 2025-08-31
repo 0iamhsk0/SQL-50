@@ -1,9 +1,6 @@
 SELECT p.product_id, 
-CASE 
-    WHEN SUM(u.units) IS NULL 
-    THEN 0
-    ELSE ROUND(SUM(u.units * p.price) / SUM(u.units)::NUMERIC, 2)
-END AS average_price
+COALESCE(ROUND(SUM(u.units * p.price) / SUM(u.units)::NUMERIC, 2),0)
+AS average_price
 FROM Prices p 
 LEFT JOIN UnitsSold u
 ON p.product_id = u.product_id
